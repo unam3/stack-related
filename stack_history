@@ -1,0 +1,12 @@
+stack ghc -- -Wall -O2 -threaded  solution.hs && stack exec -- $(pwd)/solution input out +RTS -N4
+stack exec hlint 
+stack build && stack exec rest-news-exe
+stack test --test-arguments "--match '/RestNews/getArticleComments'"
+stack build && stack exec trial-bot-all-exe
+stack build && stack exec rest-news-exe
+stack ghci src/Course/Applicative.hs src/Test/ApplicativeTest.hs 
+stack test --file-watch
+stack test --test-arguments '--match "/RestNews/updateCategory/returns error if non-existent parent category/"'
+git clone --depth 1 https://github.com/fullstack-development/developers-roadmap.git
+stack test --test-arguments '--match "/CathodeRayTube/executeInstructionsII/works for testInput2 part/"' --file-watch
+stack new 15d  ~/stack-templates/simple-library~.hsfiles -p moduleName:RambunctiousRecitations

@@ -1,0 +1,71 @@
+{-# START_FILE package.yaml #-}
+name:                {{name}}
+version:             0.1.0.0
+
+dependencies:
+# lts/20/2.yaml
+- base == 4.16.4.0
+
+ghc-options:
+- -threaded
+- -O2
+- -Wall
+
+library:
+  source-dirs:      src
+
+tests:
+  {{name}}-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -O2
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - {{name}}
+    - hspec    
+
+{-# START_FILE src/{{moduleName}}.hs #-}
+module {{moduleName}} where
+
+--parseInput :: String -> 
+parseInput = fmap id . lines
+
+
+
+{-# START_FILE test/Spec.hs #-}
+{-# OPTIONS_GHC -F -pgmF hspec-discover #-}
+
+{-# START_FILE testInput #-}
+42
+
+{-# START_FILE test/{{moduleName}}Spec.hs #-}
+module {{moduleName}}Spec where 
+
+import Test.Hspec (Spec, describe, it, runIO, shouldBe)
+
+import {{moduleName}}
+
+spec :: Spec
+spec = do
+    testInput <- runIO $ readFile "testInput"
+
+    --input <- runIO $ readFile "input.txt"
+
+    describe "parseInput" $ do
+        it "works"
+            $ shouldBe
+                (parseInput testInput)
+                "42"
+
+    describe "f" $ do
+        it "works"
+            $ shouldBe
+                42
+                42
+
+{-# START_FILE Setup.hs #-}
+import Distribution.Simple
+main = defaultMain
